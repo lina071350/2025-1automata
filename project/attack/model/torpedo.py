@@ -13,17 +13,18 @@ from ..mobject.torpedo_control_object import TorpedoControlObject
 
 from utils.object_db import ObjectDB
 
+
 class Torpedo(StructuralModel):
     def __init__(self, name, yaml_data):
         StructuralModel.__init__(self, name)
-        
-        # Model Object Instantiation        
+
+        # Model Object Instantiation
         self.mo = ManueverObject(**yaml_data["ManueverObject"])
         self.do = DetectorObject(**yaml_data["DetectorObject"])
         self.co = TorpedoControlObject(**yaml_data["TorpedoControlObject"])
-        
+
         ObjectDB().items.append(self.mo)
-        
+
         # Model Instantiation
         man = Manuever(f"[{name}][Manuever]", self)
         detect = Detector(f"[{name}][Detector]", self)

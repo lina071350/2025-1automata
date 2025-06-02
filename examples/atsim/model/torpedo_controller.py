@@ -4,12 +4,14 @@ import datetime
 
 from pyjevsim.system_message import SysMessage
 
+
 class TorpedoCommandControl(BehaviorModel):
     def __init__(self, name, platform):
         BehaviorModel.__init__(self, name)
-        
+
+        print("!!!!!!!!!!!!!")
         self.platform = platform
-        
+
         self.init_state("Wait")
         self.insert_state("Wait", Infinite)
         self.insert_state("Decision", 0)
@@ -18,7 +20,7 @@ class TorpedoCommandControl(BehaviorModel):
         self.insert_output_port("target")
         self.threat_list = []
 
-    def ext_trans(self,port, msg):
+    def ext_trans(self, port, msg):
         if port == "threat_list":
             print(f"{self.get_name()}[threat_list]: {datetime.datetime.now()}")
             self.threat_list = msg.retrieve()[0]
@@ -26,21 +28,27 @@ class TorpedoCommandControl(BehaviorModel):
 
     def output(self, msg):
         target = None
-        
+
+        min_distance = float("inf")
         for t in self.threat_list:
-            target =  self.platform.co.get_target(self.platform.mo, t)
-                
+            candidate = self.platform.co.get_target(self.platform.mo, t)
+            if candidate and hasattr(candidate, "distance"):
+                if candidate.distance < min_distance:
+                    min_distance = candidate.distance
+                    target = candidate
+
         # house keeping
         self.threat_list = []
         self.platform.co.reset_target()
-        
+
         if target:
+            print(f"{self.get_name()}: 목표 설정 - 거리 {min_distance:.2f}")
             message = SysMessage(self.get_name(), "target")
             message.insert(target)
             msg.insert_message(message)
-        
+
         return msg
-        
+
     def int_trans(self):
         if self._cur_state == "Decision":
             self._cur_state = "Wait"
