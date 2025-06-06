@@ -4,6 +4,7 @@ import datetime
 
 from pyjevsim.system_message import SysMessage
 
+# 의사결정자 역할
 class CommandControl(BehaviorModel):
     def __init__(self, name, platform):
         BehaviorModel.__init__(self, name)
