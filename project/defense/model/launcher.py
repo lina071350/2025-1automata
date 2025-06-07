@@ -1,4 +1,4 @@
-import datetime
+import datetime 
 import math
 
 from pyjevsim import BehaviorModel, Infinite
@@ -37,14 +37,16 @@ class Launcher(BehaviorModel):
             # 직접 기만기 정의
             decoy_list = [
                 {"type": "self_propelled", "lifespan": 30, "speed": 3, "xy_speed": 3, "heading": 275, "elevation": 0, "azimuth": 120},
-                {"type": "stationary", "lifespan": 30, "elevation": 0, "azimuth": 0, "speed": 0},
+                {"type": "stationary", "lifespan": 30, "elevation": 0, "azimuth": 0, "speed": 0, "position": position},
+                {"type": "stationary", "lifespan": 30, "elevation": 90, "azimuth": 90, "speed": 0, "position": (position[0] + 10, position[1] + 10, position[2])},
+                {"type": "stationary", "lifespan": 30, "elevation": 90, "azimuth": 90, "speed": 0, "position": (position[0] - 10, position[1] - 10, position[2])},
             ]      
 
             for idx, decoy in enumerate(decoy_list):
                 destroy_t = math.ceil(decoy['lifespan'])
 
                 if decoy["type"] == "stationary":
-                    sdo = StationaryDecoyObject(position, decoy)
+                    sdo = StationaryDecoyObject(decoy["position"], decoy)
                     decoy_model = StationaryDecoy(f"[Decoy][{idx}]", sdo)
                 elif decoy["type"] == "self_propelled":
                     sdo = SelfPropelledDecoyObject(position, decoy)
@@ -55,6 +57,7 @@ class Launcher(BehaviorModel):
                 ObjectDB().decoys.append((f"[Decoy][{idx}]", sdo))
                 ObjectDB().items.append(sdo)
                 se.register_entity(decoy_model, 0, destroy_t)
+
 
             self.launch_flag = True
 
