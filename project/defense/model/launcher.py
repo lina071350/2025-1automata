@@ -1,4 +1,4 @@
-import datetime 
+import datetime
 import math
 
 from pyjevsim import BehaviorModel, Infinite
@@ -34,12 +34,10 @@ class Launcher(BehaviorModel):
             se = ObjectDB().get_executor()
             position = self.platform.get_position()
 
-            # 직접 고정식 2개, 자항식 2개 정의
+            # 직접 기만기 정의
             decoy_list = [
+                {"type": "self_propelled", "lifespan": 30, "speed": 3, "xy_speed": 3, "heading": 275, "elevation": 0, "azimuth": 120},
                 {"type": "stationary", "lifespan": 30, "elevation": 0, "azimuth": 0, "speed": 0},
-                {"type": "stationary", "lifespan": 30, "elevation": 0, "azimuth": 180, "speed": 0},
-                {"type": "self_propelled", "lifespan": 20, "speed": 15, "xy_speed": 15, "heading": 90, "elevation": 0, "azimuth": 90},
-                {"type": "self_propelled", "lifespan": 20, "speed": 15, "xy_speed": 15, "heading": 270, "elevation": 0, "azimuth": 270},
             ]      
 
             for idx, decoy in enumerate(decoy_list):
