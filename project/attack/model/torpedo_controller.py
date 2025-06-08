@@ -33,6 +33,9 @@ class TorpedoCommandControl(BehaviorModel):
         target_pos = None
 
         for t in self.threat_list:
+            if "decoy" in t.__class__.__name__.lower():
+                continue
+
             target = self.platform.co.get_target(self.platform.mo, t)
             torpedo_pos = self.platform.mo.get_position()
 
