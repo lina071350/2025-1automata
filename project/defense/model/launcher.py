@@ -1,4 +1,4 @@
-import datetime 
+import datetime
 import math
 
 from pyjevsim import BehaviorModel, Infinite
@@ -47,10 +47,10 @@ class Launcher(BehaviorModel):
 
                 if decoy["type"] == "stationary":
                     sdo = StationaryDecoyObject(decoy["position"], decoy)
-                    decoy_model = StationaryDecoy(f"[Decoy][{idx}]", sdo)
+                    decoy_model = StationaryDecoy(f"[FakeSurfaceShip][{idx}]", sdo)
                 elif decoy["type"] == "self_propelled":
                     sdo = SelfPropelledDecoyObject(position, decoy)
-                    decoy_model = SelfPropelledDecoy(f"[Decoy][{idx}]", sdo)
+                    decoy_model = SelfPropelledDecoy(f"[FakeSurfaceShip][{idx}]", sdo)
                 else:
                     continue
 
